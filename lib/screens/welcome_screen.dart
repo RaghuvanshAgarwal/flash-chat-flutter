@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flash_chat/theme.dart';
 
 class WelcomeScreen extends StatefulWidget {
   @override
@@ -8,39 +9,38 @@ class WelcomeScreen extends StatefulWidget {
 class _WelcomeScreenState extends State<WelcomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final spacing = Theme.of(context).extension<AppSpacing>()!;
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        padding: EdgeInsets.symmetric(horizontal: spacing.s4!),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
+          textBaseline: TextBaseline.ideographic,
           children: <Widget>[
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Container(child: Image.asset('images/logo.png'), height: 60.0),
                 Text(
                   'Flash Chat',
-                  style: TextStyle(fontSize: 45.0, fontWeight: FontWeight.w900),
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    fontWeight: FontWeight.w900,
+                  ),
                 ),
               ],
             ),
-            SizedBox(height: 48.0),
+            SizedBox(height: spacing.s5! * 2),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
                 onPressed: () {},
                 child: Text(
                   'Log In',
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  ),
+                  // ElevatedButton theme controls colors
                 ),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Theme.of(context).colorScheme.primaryContainer,
-                  ),
-                ),
+                // use elevated button theme
               ),
             ),
             Padding(
@@ -49,14 +49,11 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 onPressed: () {},
                 child: Text(
                   'Register',
-                  style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
+                  // use elevated button theme but prefer secondary color
                 ),
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(
-                    Theme.of(context).colorScheme.secondaryContainer,
-                  ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  foregroundColor: Theme.of(context).colorScheme.onSecondary,
                 ),
               ),
             ),
