@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flash_chat/constants.dart';
 
 class ChatScreen extends StatefulWidget {
   @override
@@ -14,10 +13,11 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.close),
-              onPressed: () {
-                //Implement logout functionality
-              }),
+            icon: Icon(Icons.close),
+            onPressed: () {
+              //Implement logout functionality
+            },
+          ),
         ],
         title: Text('⚡️Chat'),
         backgroundColor: Colors.lightBlueAccent,
@@ -28,7 +28,14 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Container(
-              decoration: kMessageContainerDecoration,
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: Theme.of(context).colorScheme.primary,
+                    width: 2.0,
+                  ),
+                ),
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
@@ -37,16 +44,27 @@ class _ChatScreenState extends State<ChatScreen> {
                       onChanged: (value) {
                         //Do something with the user input.
                       },
-                      decoration: kMessageTextFieldDecoration,
+                      decoration: InputDecoration(
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 10.0,
+                          horizontal: 20.0,
+                        ),
+                        hintText: 'Type your message here...',
+                        border: InputBorder.none,
+                      ),
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       //Implement send functionality.
                     },
                     child: Text(
                       'Send',
-                      style: kSendButtonTextStyle,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18.0,
+                      ),
                     ),
                   ),
                 ],
