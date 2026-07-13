@@ -20,7 +20,6 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
         title: Text('⚡️Chat'),
-        backgroundColor: Colors.lightBlueAccent,
       ),
       body: SafeArea(
         child: Column(
@@ -58,14 +57,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     onPressed: () {
                       //Implement send functionality.
                     },
-                    child: Text(
-                      'Send',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18.0,
-                      ),
-                    ),
+                    child: Text('Send'),
                   ),
                 ],
               ),
