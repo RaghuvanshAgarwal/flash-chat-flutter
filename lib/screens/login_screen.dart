@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
 class LoginScreen extends StatefulWidget {
+  static const String kPageName = 'login';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }

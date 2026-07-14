@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
 class WelcomeScreen extends StatefulWidget {
+  static const String kPageName = 'welcome';
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
