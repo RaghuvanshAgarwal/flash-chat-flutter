@@ -1,3 +1,5 @@
+import 'package:flash_chat/screens/login_screen.dart';
+import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
@@ -23,7 +25,13 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(child: Image.asset('images/logo.png'), height: 60.0),
+                Hero(
+                  tag: 'logo',
+                  child: Container(
+                    child: Image.asset('images/logo.png'),
+                    height: 60.0,
+                  ),
+                ),
                 Text(
                   'Flash Chat',
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
@@ -37,7 +45,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, LoginScreen.kPageName);
+                },
                 child: Text(
                   'Log In',
                   // ElevatedButton theme controls colors
@@ -48,7 +58,9 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(vertical: 16.0),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RegistrationScreen.kPageName);
+                },
                 child: Text(
                   'Register',
                   // use elevated button theme but prefer secondary color
