@@ -1,5 +1,6 @@
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
+import 'package:flash_chat/utility/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
@@ -9,7 +10,51 @@ class WelcomeScreen extends StatefulWidget {
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
 
-class _WelcomeScreenState extends State<WelcomeScreen> {
+class _WelcomeScreenState extends State<WelcomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController logoAnimator;
+
+  @override
+  void initState() {
+    setupLogoAnimator();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    logoAnimator.dispose();
+    super.dispose();
+  }
+
+  void setupLogoAnimator() {
+    logoAnimator = AnimationController(
+      vsync: this,
+      duration: Duration(seconds: 1),
+    );
+    logoAnimator.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        Future.delayed(Duration(seconds: 1), () {
+          if (mounted) {
+            logoAnimator.forward(from: 0);
+          }
+        });
+      }
+    });
+    logoAnimator.forward();
+  }
+
+  int getLogoLabelSubstringValue() {
+    const String label = Constants.kAppName;
+    int value = (label.length * logoAnimator.value).round();
+    return value;
+  }
+
+  String getLogoLiteral() {
+    int end = getLogoLabelSubstringValue();
+    return Constants.kAppName.substring(0, getLogoLabelSubstringValue()) +
+        (end == Constants.kAppName.length ? '' : '_');
+  }
+
   @override
   Widget build(BuildContext context) {
     final spacing = Theme.of(context).extension<AppSpacing>()!;
@@ -23,7 +68,6 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
           textBaseline: TextBaseline.ideographic,
           children: <Widget>[
             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Hero(
                   tag: 'logo',
@@ -32,11 +76,14 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     height: 60.0,
                   ),
                 ),
-                Text(
-                  'Flash Chat',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontWeight: FontWeight.w900,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                AnimatedBuilder(
+                  animation: logoAnimator,
+                  builder: (context, child) => Text(
+                    getLogoLiteral(),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                      fontWeight: FontWeight.w900,
+                      color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    ),
                   ),
                 ),
               ],
