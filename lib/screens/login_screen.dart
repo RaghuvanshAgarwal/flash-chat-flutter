@@ -1,6 +1,8 @@
 import 'package:flash_chat/components/email_input_field.dart';
 import 'package:flash_chat/components/password_input_field.dart';
 import 'package:flash_chat/components/rounded_rectangle_button.dart';
+import 'package:flash_chat/controllers/login_screen_controller.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
@@ -11,8 +13,13 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  String email = '';
-  String password = '';
+  late final LoginScreenController controller;
+
+  @override
+  void initState() {
+    controller = LoginScreenController();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,21 +42,23 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: spacing.s5! * 2),
             EmailInputField(
               onChanged: (value) {
-                email = value;
+                controller.email = value;
               },
             ),
             SizedBox(height: spacing.s2!),
             PasswordInputField(
               onChanged: (value) {
-                password = value;
+                controller.password = value;
               },
             ),
             SizedBox(height: spacing.s4!),
             RoundedRectangleButton(
               label: 'Log In',
-              onPressed: () {
-                print(email);
-                print(password);
+              onPressed: () async {
+                bool success = await controller.login();
+                if (success) {
+                  Navigator.pushNamed(context, ChatScreen.kPageName);
+                }
               },
             ),
           ],
