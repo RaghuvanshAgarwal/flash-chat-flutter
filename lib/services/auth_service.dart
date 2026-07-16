@@ -13,6 +13,18 @@ class AuthService {
     return result;
   }
 
+  Future<UserCredential> login({
+    required String email,
+    required String password,
+  }) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    UserCredential result = await auth.signInWithEmailAndPassword(
+      email: email,
+      password: password,
+    );
+    return result;
+  }
+
   User? get currentUser {
     FirebaseAuth auth = FirebaseAuth.instance;
     return auth.currentUser;
