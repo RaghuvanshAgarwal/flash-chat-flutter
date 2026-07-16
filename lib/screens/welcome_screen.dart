@@ -1,3 +1,4 @@
+import 'package:flash_chat/components/rounded_rectangle_button.dart';
 import 'package:flash_chat/screens/login_screen.dart';
 import 'package:flash_chat/screens/registration_screen.dart';
 import 'package:flash_chat/utility/constants.dart';
@@ -54,33 +55,20 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
               ],
             ),
             SizedBox(height: spacing.s5! * 2),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, LoginScreen.kPageName);
-                },
-                child: Text(
-                  'Log In',
-                  // ElevatedButton theme controls colors
-                ),
-                // use elevated button theme
-              ),
+            RoundedRectangleButton(
+              label: 'Log In',
+              onPressed: () {
+                Navigator.pushNamed(context, LoginScreen.kPageName);
+              },
             ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, RegistrationScreen.kPageName);
-                },
-                child: Text(
-                  'Register',
-                  // use elevated button theme but prefer secondary color
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  foregroundColor: Theme.of(context).colorScheme.onSecondary,
-                ),
+            RoundedRectangleButton(
+              label: 'Register',
+              onPressed: () {
+                Navigator.pushNamed(context, RegistrationScreen.kPageName);
+              },
+              buttonStyle: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                foregroundColor: Theme.of(context).colorScheme.onSecondary,
               ),
             ),
           ],

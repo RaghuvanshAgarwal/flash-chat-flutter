@@ -1,3 +1,4 @@
+import 'package:flash_chat/components/rounded_rectangle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
@@ -47,10 +48,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
             SizedBox(height: spacing.s4!),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 16.0),
-              child: ElevatedButton(onPressed: () {}, child: Text('Register')),
-            ),
+            RoundedRectangleButton(label: 'Register', onPressed: () {}),
           ],
         ),
       ),
