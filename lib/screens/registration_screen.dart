@@ -1,4 +1,8 @@
+import 'package:flash_chat/components/email_input_field.dart';
+import 'package:flash_chat/components/password_input_field.dart';
 import 'package:flash_chat/components/rounded_rectangle_button.dart';
+import 'package:flash_chat/controllers/registration_screen_controller.dart';
+import 'package:flash_chat/screens/chat_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
 
@@ -9,6 +13,14 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
+  late final RegistrationScreenController controller;
+
+  @override
+  void initState() {
+    controller = RegistrationScreenController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final spacing = Theme.of(context).extension<AppSpacing>()!;
@@ -28,27 +40,27 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               ),
             ),
             SizedBox(height: spacing.s5! * 2),
-            TextField(
+            EmailInputField(
               onChanged: (value) {
-                //Do something with the user input.
+                controller.email = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                // rely on Theme's InputDecorationTheme for borders/padding
-              ),
             ),
             SizedBox(height: spacing.s2!),
-            TextField(
+            PasswordInputField(
               onChanged: (value) {
-                //Do something with the user input.
+                controller.password = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your password',
-                // rely on Theme's InputDecorationTheme for borders/padding
-              ),
             ),
             SizedBox(height: spacing.s4!),
-            RoundedRectangleButton(label: 'Register', onPressed: () {}),
+            RoundedRectangleButton(
+              label: 'Register',
+              onPressed: () async {
+                bool success = await controller.register();
+                if (success) {
+                  Navigator.pushNamed(context, ChatScreen.kPageName);
+                }
+              },
+            ),
           ],
         ),
       ),

@@ -41,6 +41,8 @@ class AppTheme {
         fillColor: colorScheme.surfaceContainerHighest,
         contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+        prefixIconColor: colorScheme.onSurfaceVariant,
+        suffixIconColor: colorScheme.onSurfaceVariant,
       ),
       textTheme: Typography.material2021().black.apply(
         bodyColor: colorScheme.onSurface,

@@ -1,3 +1,5 @@
+import 'package:flash_chat/components/email_input_field.dart';
+import 'package:flash_chat/components/password_input_field.dart';
 import 'package:flash_chat/components/rounded_rectangle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flash_chat/theme.dart';
@@ -9,6 +11,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  String email = '';
+  String password = '';
+
   @override
   Widget build(BuildContext context) {
     final spacing = Theme.of(context).extension<AppSpacing>()!;
@@ -28,27 +33,25 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             SizedBox(height: spacing.s5! * 2),
-            TextField(
+            EmailInputField(
               onChanged: (value) {
-                //Do something with the user input.
+                email = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your email',
-                // rely on Theme's InputDecorationTheme for borders/padding
-              ),
             ),
             SizedBox(height: spacing.s2!),
-            TextField(
+            PasswordInputField(
               onChanged: (value) {
-                //Do something with the user input.
+                password = value;
               },
-              decoration: InputDecoration(
-                hintText: 'Enter your password.',
-                // rely on Theme's InputDecorationTheme for borders/padding
-              ),
             ),
             SizedBox(height: spacing.s4!),
-            RoundedRectangleButton(label: 'Log In', onPressed: () {}),
+            RoundedRectangleButton(
+              label: 'Log In',
+              onPressed: () {
+                print(email);
+                print(password);
+              },
+            ),
           ],
         ),
       ),
