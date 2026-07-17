@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
             RoundedRectangleButton(
               label: 'Log In',
               onPressed: () async {
-                bool success = await controller.login();
+                bool success = await controller.login(context);
                 if (success) {
                   Navigator.pushNamed(context, ChatScreen.kPageName);
                 }

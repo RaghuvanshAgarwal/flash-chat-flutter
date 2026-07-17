@@ -55,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             RoundedRectangleButton(
               label: 'Register',
               onPressed: () async {
-                bool success = await controller.register();
+                bool success = await controller.register(context);
                 if (success) {
                   Navigator.pushNamed(context, ChatScreen.kPageName);
                 }
