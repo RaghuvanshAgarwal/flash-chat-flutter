@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   late final LoginScreenController controller;
+  bool showSpinner = false;
 
   @override
   void initState() {
@@ -52,15 +53,26 @@ class _LoginScreenState extends State<LoginScreen> {
               },
             ),
             SizedBox(height: spacing.s4!),
-            RoundedRectangleButton(
-              label: 'Log In',
-              onPressed: () async {
-                bool success = await controller.login(context);
-                if (success) {
-                  Navigator.pushNamed(context, ChatScreen.kPageName);
-                }
-              },
-            ),
+            showSpinner
+                ? Center(child: CircularProgressIndicator())
+                : RoundedRectangleButton(
+                    label: 'Log In',
+                    onPressed: () async {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      bool success = await controller.login(context);
+                      setState(() {
+                        showSpinner = false;
+                      });
+                      if (success) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          ChatScreen.kPageName,
+                        );
+                      }
+                    },
+                  ),
           ],
         ),
       ),

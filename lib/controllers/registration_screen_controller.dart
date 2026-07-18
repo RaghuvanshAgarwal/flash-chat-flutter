@@ -6,15 +6,10 @@ import 'package:flutter/material.dart';
 class RegistrationScreenController {
   String email = '';
   String password = '';
-  late final AuthService service;
-
-  RegistrationScreenController() {
-    service = AuthService();
-  }
 
   Future<bool> register(BuildContext context) async {
     try {
-      await service.register(email: email, password: password);
+      await AuthService.instance.register(email: email, password: password);
       return true;
     } on FirebaseAuthException catch (e) {
       String message;

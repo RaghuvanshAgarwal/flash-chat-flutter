@@ -1,12 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flash_chat/services/service_base.dart';
 
-class AuthService {
+class AuthService extends ServiceBase<AuthService> {
+  AuthService._internal() {
+    _auth = FirebaseAuth.instance;
+  }
+
+  static AuthService get instance =>
+      ServiceBase.getInstance<AuthService>(() => AuthService._internal());
+
+  late final FirebaseAuth _auth;
+
   Future<UserCredential> register({
     required String email,
     required String password,
   }) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    UserCredential result = await auth.createUserWithEmailAndPassword(
+    UserCredential result = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
@@ -17,16 +26,19 @@ class AuthService {
     required String email,
     required String password,
   }) async {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    UserCredential result = await auth.signInWithEmailAndPassword(
+    UserCredential result = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
     return result;
   }
 
+  Future<void> logout() async {
+    if (currentUser == null) return;
+    await _auth.signOut();
+  }
+
   User? get currentUser {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    return auth.currentUser;
+    return _auth.currentUser;
   }
 }

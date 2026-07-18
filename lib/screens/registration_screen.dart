@@ -14,6 +14,7 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   late final RegistrationScreenController controller;
+  bool showSpinner = false;
 
   @override
   void initState() {
@@ -52,15 +53,26 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
               },
             ),
             SizedBox(height: spacing.s4!),
-            RoundedRectangleButton(
-              label: 'Register',
-              onPressed: () async {
-                bool success = await controller.register(context);
-                if (success) {
-                  Navigator.pushNamed(context, ChatScreen.kPageName);
-                }
-              },
-            ),
+            showSpinner
+                ? Center(child: CircularProgressIndicator())
+                : RoundedRectangleButton(
+                    label: 'Register',
+                    onPressed: () async {
+                      setState(() {
+                        showSpinner = true;
+                      });
+                      bool success = await controller.register(context);
+                      setState(() {
+                        showSpinner = false;
+                      });
+                      if (success) {
+                        Navigator.pushReplacementNamed(
+                          context,
+                          ChatScreen.kPageName,
+                        );
+                      }
+                    },
+                  ),
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:flash_chat/controllers/chat_screen_controller.dart';
+import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -7,6 +9,15 @@ class ChatScreen extends StatefulWidget {
 }
 
 class _ChatScreenState extends State<ChatScreen> {
+  late final ChatScreenController controller;
+  bool isSendButtonActive = true;
+
+  @override
+  void initState() {
+    controller = ChatScreenController();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,8 +26,9 @@ class _ChatScreenState extends State<ChatScreen> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.close),
-            onPressed: () {
-              //Implement logout functionality
+            onPressed: () async {
+              await controller.logout();
+              Navigator.pop(context, WelcomeScreen.kPageName);
             },
           ),
         ],
@@ -43,6 +55,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     child: TextField(
                       onChanged: (value) {
                         //Do something with the user input.
+                        controller.messageText = value;
                       },
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
@@ -55,9 +68,19 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {
-                      //Implement send functionality.
-                    },
+                    onPressed: isSendButtonActive
+                        ? () async {
+                            setState(() {
+                              isSendButtonActive = false;
+                            });
+                            await controller.sendMessage();
+                            if (mounted) {
+                              setState(() {
+                                isSendButtonActive = true;
+                              });
+                            }
+                          }
+                        : null,
                     child: Text('Send'),
                   ),
                 ],

@@ -6,15 +6,10 @@ import 'package:flutter/material.dart';
 class LoginScreenController {
   String email = '';
   String password = '';
-  late final AuthService service;
-
-  LoginScreenController() {
-    service = AuthService();
-  }
 
   Future<bool> login(BuildContext context) async {
     try {
-      await service.login(email: email, password: password);
+      await AuthService.instance.login(email: email, password: password);
       return true;
     } on FirebaseAuthException catch (e) {
       String message;
