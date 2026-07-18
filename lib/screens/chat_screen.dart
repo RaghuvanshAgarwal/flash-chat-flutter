@@ -1,6 +1,11 @@
+import 'package:flash_chat/components/dialogs.dart';
+import 'package:flash_chat/components/message_bubble.dart';
 import 'package:flash_chat/controllers/chat_screen_controller.dart';
+import 'package:flash_chat/modals/message.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
+import 'package:flash_chat/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ChatScreen extends StatefulWidget {
   static const String kPageName = 'chat';
@@ -10,12 +15,20 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   late final ChatScreenController controller;
+  late final TextEditingController messageBoxController;
   bool isSendButtonActive = true;
 
   @override
   void initState() {
     controller = ChatScreenController();
+    messageBoxController = TextEditingController();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    messageBoxController.dispose();
+    super.dispose();
   }
 
   @override
@@ -36,9 +49,37 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: SafeArea(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
+            Expanded(
+              child: StreamBuilder<List<Message>>(
+                stream: controller.messageStream(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    showAlert(
+                      context,
+                      'Error Detected',
+                      snapshot.error.toString(),
+                    );
+                  }
+                  if (!snapshot.hasData) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                  final messages = snapshot.data!;
+                  return ListView.builder(
+                    reverse: true, // shows latest at bottom, easy auto-scroll
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[index];
+                      final isMine = controller.isMessageSentByLocalUser(
+                        sender: message.sender,
+                      );
+                      return MessageBubble(isMine: isMine, message: message);
+                    },
+                  );
+                },
+              ),
+            ),
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -53,6 +94,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      controller: messageBoxController,
                       onChanged: (value) {
                         //Do something with the user input.
                         controller.messageText = value;
@@ -73,7 +115,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             setState(() {
                               isSendButtonActive = false;
                             });
-                            await controller.sendMessage();
+                            await controller.sendMessage(context: context);
+                            messageBoxController.clear();
+                            controller.messageText = '';
                             if (mounted) {
                               setState(() {
                                 isSendButtonActive = true;
