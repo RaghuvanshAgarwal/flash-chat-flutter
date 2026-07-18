@@ -4,6 +4,7 @@ import 'package:flash_chat/controllers/chat_screen_controller.dart';
 import 'package:flash_chat/modals/message.dart';
 import 'package:flash_chat/screens/welcome_screen.dart';
 import 'package:flash_chat/theme.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +18,7 @@ class _ChatScreenState extends State<ChatScreen> {
   late final ChatScreenController controller;
   late final TextEditingController messageBoxController;
   bool isSendButtonActive = true;
+  bool isMessageBoxEmpty = true;
 
   @override
   void initState() {
@@ -38,10 +40,15 @@ class _ChatScreenState extends State<ChatScreen> {
         leading: null,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.close),
+            icon: const Icon(Icons.logout),
             onPressed: () async {
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                WelcomeScreen.kPageName,
+                (_) => false,
+              );
+
               await controller.logout();
-              Navigator.pop(context, WelcomeScreen.kPageName);
             },
           ),
         ],
@@ -94,11 +101,15 @@ class _ChatScreenState extends State<ChatScreen> {
                 children: <Widget>[
                   Expanded(
                     child: TextField(
+                      textInputAction: TextInputAction.send,
                       controller: messageBoxController,
                       onChanged: (value) {
-                        //Do something with the user input.
+                        setState(() {
+                          isMessageBoxEmpty = value == '';
+                        });
                         controller.messageText = value;
                       },
+                      onSubmitted: (value) => {sendMessage(context)},
                       decoration: InputDecoration(
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 10.0,
@@ -110,19 +121,9 @@ class _ChatScreenState extends State<ChatScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: isSendButtonActive
-                        ? () async {
-                            setState(() {
-                              isSendButtonActive = false;
-                            });
-                            await controller.sendMessage(context: context);
-                            messageBoxController.clear();
-                            controller.messageText = '';
-                            if (mounted) {
-                              setState(() {
-                                isSendButtonActive = true;
-                              });
-                            }
+                    onPressed: isSendButtonActive && !isMessageBoxEmpty
+                        ? () {
+                            sendMessage(context);
                           }
                         : null,
                     child: Text('Send'),
@@ -134,5 +135,19 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> sendMessage(BuildContext context) async {
+    setState(() {
+      isSendButtonActive = false;
+    });
+    await controller.sendMessage(context: context);
+    messageBoxController.clear();
+    controller.messageText = '';
+    if (mounted) {
+      setState(() {
+        isSendButtonActive = true;
+      });
+    }
   }
 }
